@@ -10,61 +10,92 @@ namespace student_credit
 {
     class CoursesCredit
     {
-        String courseName, year, institute, lecturer, courseCredit, courseCreditArea,link;
-        int hours, hoursCredit, grade;
+        private const String _DataBasePath = "C:\\myf\\flatData.txt";
+        private const char _DBColDel = '\t';    /* Data base column delimiter */
+        private const String _SyllabusPath = "C:\\סילבוסים";
+        private String _courseName, _year, _institute, _courseCredit, _courseCreditArea,_link;
+        private int _hours, _hoursCredit, _grade,_creditPoints;
+
         private static ObservableCollection<CoursesCredit> AllCourseCredit;
-        public string CourseName { get => courseName; set => courseName = value; }
-        public string Institute { get => institute; set => institute = value; }
-        public string Lecturer { get => lecturer; set => lecturer = value; }
-        public string CourseCredit { get => courseCredit; set => courseCredit = value; }
-        public string CourseCreditArea { get => courseCreditArea; set => courseCreditArea = value; }
-        public int Hours { get => hours; set => hours = value; }
-        public int HoursCredit { get => hoursCredit; set => hoursCredit = value; }
-        public String Year { get => year; set => year = value; }
-        public int Grade { get => grade; set => grade = value; }
-        public string Link { get => link; set => link = value; }
+        public string CourseName { get => _courseName; set => _courseName = value; }
+        public string Institute { get => _institute; set => _institute = value; }
+        public string CourseCredit { get => _courseCredit; set => _courseCredit = value; }
+        public string CourseCreditArea { get => _courseCreditArea; set => _courseCreditArea = value; }
+        public int Hours { get => _hours; set => _hours = value; }
+        public int HoursCredit { get => _hoursCredit; set => _hoursCredit = value; }
+        public String Year { get => _year; set => _year = value; }
+        public int Grade { get => _grade; set => _grade = value; }
+        public string Link { get => _link; set => _link = value; }
+        public int CreditPoints { get => _creditPoints; set => _creditPoints = value; }
 
         static String CourseToLine(CoursesCredit course)
         {
-            return course.courseName+ "\t" + course.Institute + "\t" + course.Year + "\t"
-                + course.Lecturer + "\t" +course.Hours + "\t" +course.Grade + "\t" +course.CourseCredit + "\t" +
-                course.CourseCreditArea + "\t" +course.HoursCredit +"\t" + course.Link;
+            return course._courseName+ _DBColDel + course.Institute + _DBColDel + course.Year + _DBColDel
+                  +course.Hours + _DBColDel+ course.CreditPoints + _DBColDel +course.Grade + _DBColDel +course.CourseCredit + _DBColDel +
+                course.CourseCreditArea + _DBColDel +course.HoursCredit +_DBColDel + course.Link;
         }
 
 
         public static void UpdateCourseCreditFile()
         {
-            File.WriteAllText(@"C:\myf\flatData.txt", string.Join("\r\n",AllCourseCredit.Select(CourseToLine)), Encoding.Default);
+            File.WriteAllText(@_DataBasePath, string.Join("\r\n",AllCourseCredit.Select(CourseToLine)), Encoding.Default);
             
         }
 
        
+        enum ColumnNum
+        {
+            COURSE_NAME,
+            INSTITUTE,
+            YEAR,
+            HOURS,
+            CREDIT_POINTS,
+            GRADE,
+            COURSE_CREDIT,
+            COURSE_CREDIT_AREA,
+            COURSE_CREDIT_SUB_AREA,
+            HOURS_CREDIT,
+            LINK,
+
+        }
+
         public static ObservableCollection<CoursesCredit> GetAllCoursesCredit()
         {
             AllCourseCredit = new ObservableCollection<CoursesCredit>();
-            
-            var fileLines = File.ReadAllLines(@"C:\myf\flatData.txt", Encoding.Default);
+            int hours, grades, hoursCredit, creditPoints;
+            var fileLines = File.ReadAllLines(@_DataBasePath, Encoding.Default);
             
             var lineLength = fileLines[0].Length;
             var lineNum = fileLines.Length;
             String[] line = new String[lineLength];
-            
+            var _linkAdd = "";
             for (var i = 0; i < lineNum; i++)
             {
-                fileLines[i].Split('\t').CopyTo(line, 0);
+                fileLines[i].Split(_DBColDel).CopyTo(line, 0);
+
+                Int32.TryParse(line[(int)ColumnNum.HOURS], out hours);
+                Int32.TryParse(line[(int)ColumnNum.GRADE], out grades);
+                Int32.TryParse(line[(int)ColumnNum.HOURS_CREDIT], out hoursCredit);
+                Int32.TryParse(line[(int)ColumnNum.CREDIT_POINTS], out creditPoints);
+
+                if (!line[6].Contains("לא הוכר"))
+                    _linkAdd = "C:\\";
+                else
+                    _linkAdd = "";
+                
                 AllCourseCredit.Add(new CoursesCredit()
                 {
                     
-                    CourseName = line[0],
-                    Institute = line[1],
-                    Year = line[2],
-                    Lecturer = line[3],
-                    Hours = Int32.Parse("  3 \t"),
-                    Grade = Int32.Parse("4"),
+                    CourseName = line[(int)ColumnNum.COURSE_NAME],
+                    Institute = line[(int)ColumnNum.INSTITUTE],
+                    Year = line[(int)ColumnNum.YEAR],
+                    Hours = hours,
+                    CreditPoints = creditPoints,
+                    Grade = grades,
                     CourseCredit = line[6],
                     CourseCreditArea = line[7],
-                    HoursCredit = Int32.Parse("5"),
-                    Link = "C:\\סילבוסים\\" + line[1] + "\\" + line[0],
+                    HoursCredit = hoursCredit,
+                    Link = _linkAdd,
                 });
             }
             return AllCourseCredit;

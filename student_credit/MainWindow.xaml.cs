@@ -37,6 +37,14 @@ namespace student_credit
         private void UpdateIt_Click(object sender, RoutedEventArgs e)
         {
             CoursesCredit.UpdateCourseCreditFile();
+            AllCreditsDataGrid.ItemsSource = CoursesCredit.GetAllCoursesCredit();
+        }
+
+      
+
+        private void LoadData_Click(object sender, RoutedEventArgs e)
+        {
+            AllCreditsDataGrid.ItemsSource = CoursesCredit.GetAllCoursesCredit();
         }
     }
 }

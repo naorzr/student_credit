@@ -10,7 +10,7 @@
         Title="MainWindow" d:DesignWidth="1938" d:DesignHeight="1057"   
         >
 
-    <Grid>
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2147*"/>
             <ColumnDefinition Width="66*"/>
@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
         <!-- upper logo bar -->
         <Border Margin="-2 -2 -2 0" BorderBrush="Black" BorderThickness="2" Grid.ColumnSpan="3">
-            <Grid Background="LightCoral" Grid.Row="0">
+            <Grid Background="LightSteelBlue" Grid.Row="0">
                 <Image Margin="-555,-20,964,-2" Source="logo_sticky.png" />
             </Grid>
         </Border>
@@ -39,56 +39,57 @@
                 </Grid.ColumnDefinitions>
                 <!-- middle right side panel-->
                 <Border Margin="0,-2" BorderBrush="Black" BorderThickness="2" Grid.Column="1">
-                    <StackPanel Margin="10 0 0 0" Orientation="Vertical" Grid.Column="1">
+                    <StackPanel  Margin="10 0 0 0" Orientation="Vertical"  >
                         <StackPanel Orientation="Horizontal" Margin="0 10 0 10" Height="47" >
                             <Image  Source="icons8_Add_File_50px.png" Stretch="Fill" />
-                            <TextBlock  VerticalAlignment="Center" FontSize="16" FontFamily="David" Margin="-15 0 0 0" Padding="21 0 0 0">אקרדיטציה חדשה</TextBlock>
+                            <TextBlock  VerticalAlignment="Center" FontSize="16" FontFamily="David" Margin="-15 0 0 0" Padding="21 0 0 0"><Run Text="אקרדיטציה חדשה"/></TextBlock>
                         </StackPanel>
                         <Grid HorizontalAlignment="Stretch" Height="2"  Background="Black"/>
                         <StackPanel Orientation="Horizontal"  Margin="0 15 0 10" Height="47">
                             <Image Source="icons8_Open_50px.png" Width="auto" />
-                            <TextBlock  VerticalAlignment="Center" FontSize="16" FontFamily="David" Padding="25 0 0 0">הכרות קודמות</TextBlock>
+                            <TextBlock  VerticalAlignment="Center" FontSize="16" FontFamily="David" Padding="25 0 0 0"><Run Text="הכרות קודמות"/></TextBlock>
                         </StackPanel>
                         <Grid HorizontalAlignment="Stretch" Height="2" Margin="0,10" Background="Black"/>
                         <StackPanel Orientation="Horizontal"  Margin="0 15 0 10" Height="47">
                             <Image Source="icons8_Building_50px.png" Width="auto" />
-                            <TextBlock  VerticalAlignment="Center" FontSize="16" FontFamily="David" Padding="42 0 0 0">מבנה חוגים</TextBlock>
+                            <TextBlock  VerticalAlignment="Center" FontSize="16" FontFamily="David" Padding="42 0 0 0"><Run Text="מבנה חוגים"/></TextBlock>
                         </StackPanel>
                         <Grid HorizontalAlignment="Stretch" Height="2" Margin="0,10" Background="Black"/>
                         <StackPanel Orientation="Horizontal"  Margin="0 15 0 10" Height="47">
                             <Image Source="icons8_Box_50px.png" Width="auto" />
-                            <TextBlock  VerticalAlignment="Center" FontSize="16" FontFamily="David" Padding="52 0 0 0">סילבוסים</TextBlock>
+                            <TextBlock  VerticalAlignment="Center" FontSize="16" FontFamily="David" Padding="52 0 0 0"><Run Text="סילבוסים"/></TextBlock>
                         </StackPanel>
                         <Grid HorizontalAlignment="Stretch" Height="2" Margin="0,10" Background="Black"/>
                         <StackPanel Orientation="Horizontal"  Margin="0 15 0 10" Height="47">
                             <Image Source="icons8_Storage_50px.png" Width="auto" />
-                            <TextBlock  VerticalAlignment="Center" FontSize="16" FontFamily="David" Padding="40 0 0 0">ניהול הכרות</TextBlock>
+                            <TextBlock  VerticalAlignment="Center" FontSize="16" FontFamily="David" Padding="40 0 0 0"><Run Text="ניהול הכרות"/></TextBlock>
                         </StackPanel>
                         <Grid HorizontalAlignment="Stretch" Height="2" Margin="0,10" Background="Black"/>
                     </StackPanel>
                 </Border>
                 <!-- middle left content -->
-                <Grid  Name="MainContent" Grid.Column="0">
+                <Grid  Name="MainContent" Grid.Column="0" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition  Width="*"/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="1">
-                        <DataGrid x:Name="AllCreditsDataGrid"  AutoGenerateColumns="False" CanUserAddRows="True" FlowDirection="RightToLeft" VerticalAlignment="Top" HorizontalAlignment="Right" Width="auto" Height="auto">
+                        <DataGrid x:Name="AllCreditsDataGrid"  AutoGenerateColumns="False" CanUserAddRows="True" FlowDirection="RightToLeft" VerticalAlignment="Top" HorizontalAlignment="Right" Width="auto" Height="auto" Margin="0,10,0,0">
                             <DataGrid.Resources>
                                 <Style TargetType="{x:Type DataGridColumnHeader}">
+
                                     <Setter Property="FontFamily" Value="David"/>
                                     <Setter Property="FontSize" Value="18"/>
+                                    <Setter Property="Foreground" Value="SteelBlue" />
                                 </Style>
                             </DataGrid.Resources>
 
-                            <DataGrid.Columns>
-                                
-                                <DataGridTextColumn Header="שם הקורס"  Width="200" Binding="{Binding CourseName}"/>
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="שם הקורס"  Width="200" Binding="{Binding CourseName}"  />
                                 <DataGridTextColumn Header="מוסד לימודים" Width="120" Binding="{Binding Institute}" />
                                 <DataGridTextColumn Header="שנה" Width="50" Binding="{Binding Year}" />
-                                <DataGridTextColumn Header="שם מרצה" Width="100"  Binding="{Binding Lecturer}"/>
                                 <DataGridTextColumn Header="ש''ש" Width="50" Binding="{Binding Hours}" />
+                                <DataGridTextColumn Header="נ''ז" Width="50" Binding="{Binding Nz}" />
                                 <DataGridTextColumn Header="ציון" Width="50"  Binding="{Binding Grade}" />
                                 <DataGridTextColumn Header="מוכר במקום" Width="250" Binding="{Binding CourseCredit}"/>
                                 <DataGridTextColumn Header="מוכר לתחום" Width="150" Binding="{Binding CourseCreditArea}" />
@@ -107,16 +108,20 @@
                 </Grid>
             </Grid>
             <Grid>
-                <Button Name="UpdateIt" Click="UpdateIt_Click"  Content="Button" HorizontalAlignment="Left" Margin="745,646,0,0" VerticalAlignment="Top" Width="75"/>
+                <Button Name="UpdateIt" Click="UpdateIt_Click"  Content="Save" HorizontalAlignment="Left" Margin="1796,773,0,0" VerticalAlignment="Top" Width="75"/>
+                <Button Name="LoadData" Content="Load Data" Click="LoadData_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="1796,668,0,0"/>
+
             </Grid>
         </Grid>
 
         <!-- Bottom bar - all rights reserved -->
         <Border Margin="-2 0 -2 -4" BorderBrush="Black" BorderThickness="2" Grid.Row="2" Grid.ColumnSpan="3">
-            <Grid Grid.Row="2" Background="LightCoral">
-                <TextBlock Padding ="5 0 0 0" VerticalAlignment="Center"><InlineUIContainer>
+            <Grid Grid.Row="2" Background="LightSteelBlue">
+                <TextBlock Padding ="5 0 0 0" VerticalAlignment="Center" ><InlineUIContainer>
                         <Image Margin="0 0 5 0" Height="15" Source="icons8_Copyright_32px_1.png" Width="15"/>
+                    
                     </InlineUIContainer><Run Text="A"/><Run Text="l"/><Run Text="l Rights Reserved"/></TextBlock>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Padding="0 0 30 0">Version 1.0.0</TextBlock>
             </Grid>
         </Border>
     </Grid>
