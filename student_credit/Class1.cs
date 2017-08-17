@@ -5,44 +5,28 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace student_credit
 {
+
+    
+
+   
     class CoursesCredit
     {
+        /***********************************************
+         *          VARIABLE DECLARATIONS                               
+         ***********************************************/
         private const String _DataBasePath = "C:\\myf\\flatData.txt";
         private const char _DBColDel = '\t';    /* Data base column delimiter */
         private const String _SyllabusPath = "C:\\סילבוסים";
-        private String _courseName, _year, _institute, _courseCredit, _courseCreditArea,_link;
-        private int _hours, _hoursCredit, _grade,_creditPoints;
-
+        private String _courseName, _year, _institute, _courseCredit,_courseCreditSubArea,_link;
+        private int _hours, _hoursCredit,_creditPoints;
         private static ObservableCollection<CoursesCredit> AllCourseCredit;
-        public string CourseName { get => _courseName; set => _courseName = value; }
-        public string Institute { get => _institute; set => _institute = value; }
-        public string CourseCredit { get => _courseCredit; set => _courseCredit = value; }
-        public string CourseCreditArea { get => _courseCreditArea; set => _courseCreditArea = value; }
-        public int Hours { get => _hours; set => _hours = value; }
-        public int HoursCredit { get => _hoursCredit; set => _hoursCredit = value; }
-        public String Year { get => _year; set => _year = value; }
-        public int Grade { get => _grade; set => _grade = value; }
-        public string Link { get => _link; set => _link = value; }
-        public int CreditPoints { get => _creditPoints; set => _creditPoints = value; }
+        private Subject _subject;
+        private Area _area;
 
-        static String CourseToLine(CoursesCredit course)
-        {
-            return course._courseName+ _DBColDel + course.Institute + _DBColDel + course.Year + _DBColDel
-                  +course.Hours + _DBColDel+ course.CreditPoints + _DBColDel +course.Grade + _DBColDel +course.CourseCredit + _DBColDel +
-                course.CourseCreditArea + _DBColDel +course.HoursCredit +_DBColDel + course.Link;
-        }
-
-
-        public static void UpdateCourseCreditFile()
-        {
-            File.WriteAllText(@_DataBasePath, string.Join("\r\n",AllCourseCredit.Select(CourseToLine)), Encoding.Default);
-            
-        }
-
-       
         enum ColumnNum
         {
             COURSE_NAME,
@@ -50,7 +34,7 @@ namespace student_credit
             YEAR,
             HOURS,
             CREDIT_POINTS,
-            GRADE,
+            SUBJECT,
             COURSE_CREDIT,
             COURSE_CREDIT_AREA,
             COURSE_CREDIT_SUB_AREA,
@@ -59,27 +43,82 @@ namespace student_credit
 
         }
 
+        
+
+        /***********************************************
+         *            GET/SET FUNCTIONS                             
+         ***********************************************/
+
+        public string CourseName { get => _courseName; set => _courseName = value; }
+        public string Institute { get => _institute; set => _institute = value; }
+        public string CourseCredit { get => _courseCredit; set => _courseCredit = value; }
+        public int Hours { get => _hours; set => _hours = value; }
+        public int HoursCredit { get => _hoursCredit; set => _hoursCredit = value; }
+        public String Year { get => _year; set => _year = value; }
+        public string Link { get => _link; set => _link = value; }
+        public int CreditPoints { get => _creditPoints; set => _creditPoints = value; }
+        public string CourseCreditSubArea { get => _courseCreditSubArea; set => _courseCreditSubArea = value; }
+        public Subject Subject { get => _subject; set => _subject = value; }
+        public Area Area { get => _area; set => _area = value; }
+
+
+        /***********************************************
+        *         STATIC PUBLIC FUNCTIONS                             
+        ***********************************************/
+
+        /// <summary> CourseToLine converts a course object into a string ready to be pushed to the flat data </summary>
+        /// <param name="course">A CourseCredit object to convert</param>
+        /// <returns>A string delimited properly to be inserted into a flat data</returns>
+        static String CourseToLine(CoursesCredit course)
+        {
+            return course.CourseName + _DBColDel + 
+                   course.Institute + _DBColDel + 
+                   course.Year + _DBColDel +
+                   course.Hours + _DBColDel + 
+                   course.CreditPoints + _DBColDel +
+                   ((int)course.Subject) + _DBColDel +  
+                   course.CourseCredit + _DBColDel +
+                   course.Area + _DBColDel +
+                   course.CourseCreditSubArea + _DBColDel +
+                   course.HoursCredit +_DBColDel + 
+                   course.Link;
+        }
+
+        
+
+        public static void UpdateCourseCreditFile()
+        {
+            File.WriteAllText(@_DataBasePath, string.Join("\r\n",AllCourseCredit.Select(CourseToLine)), Encoding.Default);
+        }
+
+
+        
+
+
+
         public static ObservableCollection<CoursesCredit> GetAllCoursesCredit()
         {
             AllCourseCredit = new ObservableCollection<CoursesCredit>();
-            int hours, grades, hoursCredit, creditPoints;
+            
+            int hours, hoursCredit, creditPoints,subject,area;
             var fileLines = File.ReadAllLines(@_DataBasePath, Encoding.Default);
             
             var lineLength = fileLines[0].Length;
             var lineNum = fileLines.Length;
             String[] line = new String[lineLength];
             var _linkAdd = "";
-            for (var i = 0; i < lineNum; i++)
+            for (var i = 0; i < 15; i++)
             {
                 fileLines[i].Split(_DBColDel).CopyTo(line, 0);
 
                 Int32.TryParse(line[(int)ColumnNum.HOURS], out hours);
-                Int32.TryParse(line[(int)ColumnNum.GRADE], out grades);
                 Int32.TryParse(line[(int)ColumnNum.HOURS_CREDIT], out hoursCredit);
                 Int32.TryParse(line[(int)ColumnNum.CREDIT_POINTS], out creditPoints);
-
+                Int32.TryParse(line[(int)ColumnNum.SUBJECT], out subject);
+                Int32.TryParse(line[(int)ColumnNum.COURSE_CREDIT_AREA], out area);
+                var str = Directory.GetDirectories("C:\\");
                 if (!line[6].Contains("לא הוכר"))
-                    _linkAdd = "C:\\";
+                    _linkAdd = _SyllabusPath + "\\" + line[(int)ColumnNum.INSTITUTE] + "\\" + line[(int)ColumnNum.COURSE_NAME];
                 else
                     _linkAdd = "";
                 
@@ -91,15 +130,44 @@ namespace student_credit
                     Year = line[(int)ColumnNum.YEAR],
                     Hours = hours,
                     CreditPoints = creditPoints,
-                    Grade = grades,
-                    CourseCredit = line[6],
-                    CourseCreditArea = line[7],
+                    Subject = (Subject)subject,
+                    CourseCredit = line[(int)ColumnNum.COURSE_CREDIT],
+                    Area = (Area)area,
+                    CourseCreditSubArea = line[(int)ColumnNum.COURSE_CREDIT_SUB_AREA],
                     HoursCredit = hoursCredit,
                     Link = _linkAdd,
                 });
             }
             return AllCourseCredit;
         }
+    }
+
+    public enum Subject
+    {
+        חינוך,
+        תנך,
+        תושבע,
+        מחשבת_ישראל,
+        אזרחות,
+        אנגלית,
+        גיאוגרפיה,
+        היסטוריה,
+        חינוך_מיוחד,
+        לימודי_ארץ,
+        לשון_עברית,
+        מדעי_הטבע,
+        מתמטיקה,
+        מדעי_המחשב,
+        ספרות,
+        תקשורת,
+    }
+
+    public enum Area
+    {
+        [Description("לימודי חובה")]
+        לימודי_חובה,
+        [Description("לימודי בחירה")]
+        לימודי_בחירה,
     }
 }
 

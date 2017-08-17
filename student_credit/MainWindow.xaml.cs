@@ -31,7 +31,7 @@ namespace student_credit
         private void DG_Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             Hyperlink link = e.OriginalSource as Hyperlink;
-            Process.Start(link.NavigateUri.AbsoluteUri);
+            Process.Start(link.NavigateUri.OriginalString);
         }
 
         private void UpdateIt_Click(object sender, RoutedEventArgs e)
